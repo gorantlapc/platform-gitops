@@ -12,6 +12,9 @@ spec:
     repoURL: https://github.com/gorantlapc/platform-gitops.git
     targetRevision: master
     path: apps
+#    temporary fix to sync all apps but should be removed when we have one app per service
+    directory:
+      recurse: true
   destination:
     server: https://kubernetes.default.svc
     namespace: development
