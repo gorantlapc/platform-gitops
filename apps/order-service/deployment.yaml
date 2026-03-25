@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service-deployment
+  namespace: development
+  labels:
+    app: order-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      containers:
+        - name: order-service
+          image: 593793049094.dkr.ecr.eu-north-1.amazonaws.com/dev-order-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8085
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: dev
+            - name: AWS_REGION
+              value: eu-east-1
+            - name: AWS_SNS_TOPIC_ARN
+              value: arn:aws:sns:eu-north-1:593793049094:order-topic
+            - name: PAYMENT_SERVICE_URL
+              value: http://payment-service:8086
+            - name: INVENTORY_SERVICE_URL
+              value: http://inventory-service:8088
+            - name: JAVA_TOOL_OPTIONS
+              value: -Xmx640m -Xms256m -XX:MaxMetaspaceSize=128M -XX:MaxDirectMemorySize=128M -XX:ReservedCodeCacheSize=128M -XX:+PrintCodeCache
