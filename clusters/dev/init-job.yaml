@@ -1,0 +1,67 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: localstack-init
+  namespace: development
+  annotations:
+    # Run after LocalStack is deployed
+    argocd.argoproj.io/sync-wave: "0"
+    # Optional: run only during Argo CD sync
+    argocd.argoproj.io/hook: PostSync
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: localstack-init
+          image: amazon/aws-cli:2.12.6  # lightweight container with aws-cli
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              # Set AWS environment for LocalStack
+              export AWS_REGION='us-east-1'
+              export AWS_ACCESS_KEY_ID='test'
+              export AWS_SECRET_ACCESS_KEY='test'
+              export AWS_PAGER=""   # disable aws-cli pager
+
+              echo "Waiting for LocalStack to be ready..."
+              # adjust sleep or implement proper wait for readiness
+              sleep 10
+
+              echo "Creating SNS topic..."
+              awslocal sns create-topic --name order-topic
+
+              echo "Getting SNS topic ARN..."
+              TOPIC_ARN=$(awslocal sns list-topics --query 'Topics[?contains(TopicArn, `order-topic`)].TopicArn' --output text)
+              echo "SNS Topic ARN: $TOPIC_ARN"
+
+              echo "Creating SQS queue..."
+              awslocal sqs create-queue --queue-name notification-queue
+
+              echo "Getting SQS queue ARN..."
+              QUEUE_ARN=$(awslocal sqs get-queue-attributes \
+                --queue-url http://localhost:4566/000000000000/notification-queue \
+                --attribute-names QueueArn \
+                --query 'Attributes.QueueArn' \
+                --output text)
+              echo "SQS Queue ARN: $QUEUE_ARN"
+
+              echo "Subscribing SQS to SNS..."
+              awslocal sns subscribe \
+                --topic-arn ${TOPIC_ARN} \
+                --protocol sqs \
+                --notification-endpoint ${QUEUE_ARN}
+
+              SUBSCRIPTION_ARN=$(awslocal sns list-subscriptions-by-topic \
+                --topic-arn ${TOPIC_ARN} \
+                --query 'Subscriptions[0].SubscriptionArn' \
+                --output text)
+              echo "Subscription ARN: $SUBSCRIPTION_ARN"
+
+              echo "Enabling raw message delivery..."
+              awslocal sns set-subscription-attributes \
+                --subscription-arn ${SUBSCRIPTION_ARN} \
+                --attribute-name RawMessageDelivery \
+                --attribute-value true
+
+              echo "LocalStack SNS/SQS setup complete!"
