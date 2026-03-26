@@ -28,7 +28,7 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: dev
             - name: AWS_REGION
-              value: eu-east-1
+              value: us-east-1
             - name: AWS_SQS_QUEUE_NAME
               value: notification-queue
             - name: SES_FROM_ADDRESS
