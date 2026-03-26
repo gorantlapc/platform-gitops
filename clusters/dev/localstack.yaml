@@ -35,6 +35,12 @@ spec:
           ports:
             - containerPort: 4566
           env:
+            - name: DEFAULT_REGION
+              value: "us-east-1"
+            - name: AWS_ACCESS_KEY_ID
+              value: "test"
+            - name: AWS_SECRET_ACCESS_KEY
+              value: "test"
             - name: SERVICES
               value: "sns,sqs,ses,dynamodb" # List services you want to enable
             - name: DEBUG

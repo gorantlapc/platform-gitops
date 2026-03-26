@@ -40,7 +40,7 @@ spec:
 
               echo "Getting SQS queue ARN..."
               QUEUE_ARN=$(awslocal sqs get-queue-attributes \
-                --queue-url http://localhost:4566/000000000000/notification-queue \
+                --queue-url http://localstack:4566/000000000000/notification-queue \
                 --attribute-names QueueArn \
                 --query 'Attributes.QueueArn' \
                 --output text)
