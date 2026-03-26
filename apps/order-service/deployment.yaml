@@ -23,12 +23,14 @@ spec:
           ports:
             - containerPort: 8085
           env:
+            - name: LOCALSTACK_ENDPOINT
+              value: http://localstack:4566
             - name: SPRING_PROFILES_ACTIVE
               value: dev
             - name: AWS_REGION
-              value: eu-east-1
+              value: us-east-1
             - name: AWS_SNS_TOPIC_ARN
-              value: arn:aws:sns:eu-north-1:593793049094:order-topic
+              value: arn:aws:sns:us-east-1:593793049094:order-topic
             - name: PAYMENT_SERVICE_URL
               value: http://payment-service:8086
             - name: INVENTORY_SERVICE_URL

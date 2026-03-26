@@ -23,6 +23,8 @@ spec:
           ports:
             - containerPort: 8087
           env:
+            - name: LOCALSTACK_ENDPOINT
+              value: http://localstack:4566
             - name: SPRING_PROFILES_ACTIVE
               value: dev
             - name: AWS_REGION
