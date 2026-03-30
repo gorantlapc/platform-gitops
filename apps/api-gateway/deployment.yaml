@@ -19,7 +19,7 @@ spec:
       containers:
         - name: api-gateway
           image: 593793049094.dkr.ecr.eu-north-1.amazonaws.com/dev-api-gateway:latest
-          imagePullPolicy: Never
+#          imagePullPolicy: Never - This is commented out to allow Kubernetes to pull the image from ECR. If you want to use a local image, uncomment this line and ensure the image is built locally.
           ports:
             - containerPort: 8084
           env:
