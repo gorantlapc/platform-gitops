@@ -20,7 +20,7 @@ spec:
         - name: ecr-secret
       containers:
         - name: payment-service
-          image: 593793049094.dkr.ecr.eu-north-1.amazonaws.com/dev-payment-service:37df72b2d7e60f7090b7f288b77a0c60285605fb
+          image: .dkr.ecr..amazonaws.com/dev-payment-service:7738e01d80d118243ad990a0399fd18f02b46d34
 #          imagePullPolicy: Never - This is commented out to allow Kubernetes to pull the image from ECR. If you want to use a local image, uncomment this line and ensure the image is built locally.
           ports:
             - containerPort: 8086
