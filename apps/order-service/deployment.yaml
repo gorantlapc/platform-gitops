@@ -16,6 +16,8 @@ spec:
       labels:
         app: order-service
     spec:
+      imagePullSecrets:
+        - name: ecr-secret
       containers:
         - name: order-service
           image: 593793049094.dkr.ecr.eu-north-1.amazonaws.com/dev-order-service:37df72b2d7e60f7090b7f288b77a0c60285605fb
