@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: notification-service
-          image: 593793049094.dkr.ecr.eu-north-1.amazonaws.com/dev-notification-service:latest
+          image: 593793049094.dkr.ecr.eu-north-1.amazonaws.com/dev-notification-service:37df72b2d7e60f7090b7f288b77a0c60285605fb
 #          imagePullPolicy: Never - This is commented out to allow Kubernetes to pull the image from ECR. If you want to use a local image, uncomment this line and ensure the image is built locally.
           ports:
             - containerPort: 8087
